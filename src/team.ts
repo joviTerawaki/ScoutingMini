@@ -1,4 +1,4 @@
-//object of each element in the array from getTeamInfo 
+//object of each element in the array from getTeamInfo (the teams from TBA)
 export interface TeamInfo {
     key: "string",
     team_number: 0,
@@ -28,9 +28,11 @@ async function getTeamInfo(): Promise<TeamInfo[]> {
     return teamInfo.json(); 
 }
 
+//returns an array of Team objects with the numbers and names 
 async function getTeams(): Promise<Team[]> {
     const data = await getTeamInfo(); 
 
+    //for each TeamInfo object in the data array, map the number and name in a Team object to another array 
     return data.map(team => {
         const tm: Team = {
             teamNumber: team.key,
