@@ -17,7 +17,7 @@ export interface Team {
 
 //returns an array of teams with their info 
 //ex. for 2024hiho it returns 34 elements each with a bunch of keys and values 
-async function getTeamInfo(): Promise<TeamInfo[]> {
+const getTeamInfo = async function (): Promise<TeamInfo[]> {
     const teamInfo = await fetch('https://www.thebluealliance.com/api/v3/event/2024hiho/teams/simple', {
         headers: {
             'accept': 'application/json',
@@ -28,20 +28,10 @@ async function getTeamInfo(): Promise<TeamInfo[]> {
     return teamInfo.json(); 
 }
 
-//returns an array of Team objects with the numbers and names 
-async function getTeams(): Promise<Team[]> {
-    const data = await getTeamInfo(); 
-
-    //for each TeamInfo object in the data array, map the number and name in a Team object to another array 
-    return data.map(team => {
-        const tm: Team = {
-            teamNumber: team.key,
-            teamName: team.nickname
-        };
-        return tm; 
-    })
-}
-
-export class Teams {
+const initApp = (): void => {
+    const dataTable: HTMLTableElement = document.getElementById('dataTable') as HTMLTableElement; 
     
+
 }
+
+document.addEventListener("DOMContentLoaded", initApp);
