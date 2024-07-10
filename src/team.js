@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,11 +34,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Teams = void 0;
 //returns an array of teams with their info 
 //ex. for 2024hiho it returns 34 elements each with a bunch of keys and values 
-function getTeamInfo() {
+var getTeamInfo = function () {
     return __awaiter(this, void 0, void 0, function () {
         var teamInfo;
         return __generator(this, function (_a) {
@@ -56,29 +53,40 @@ function getTeamInfo() {
             }
         });
     });
-}
-function getTeams() {
-    return __awaiter(this, void 0, void 0, function () {
-        var data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, getTeamInfo()];
-                case 1:
-                    data = _a.sent();
-                    return [2 /*return*/, data.map(function (team) {
-                            var tm = {
-                                teamNumber: team.key,
-                                teamName: team.nickname
-                            };
-                            return tm;
-                        })];
-            }
+};
+var displayData = function () {
+    getTeamInfo().then(function (teamMap) {
+        var dataTable = document.getElementById('dataTable');
+        teamMap.forEach(function (team) {
+            // const teamRow: HTMLTableRowElement = document.createElement('teamRow') as HTMLTableRowElement; 
+            // const teamNum: HTMLTableCellElement = document.createElement('teamNumber') as HTMLTableCellElement; 
+            // teamNum.textContent = team.key.substring(3); 
+            // const teamName: HTMLTableCellElement = document.createElement('teamName') as HTMLTableCellElement; 
+            // teamName.textContent = team.nickname; 
+            // teamRow.append(teamNum, teamName); 
+            // // teamRow.append(teamName); 
+            // dataTable.append(teamRow); 
+            var teamRow = dataTable.insertRow();
+            var teamNum = teamRow.insertCell();
+            var teamName = teamRow.insertCell();
+            teamNum.textContent = team.key.substring(3);
+            teamName.textContent = team.nickname;
         });
     });
+};
+// const data: TeamInfo[] = getTeamInfo().then(teamMap => {
+//     const teams: TeamInfo[] = []; 
+//     teamMap.forEach(team => {
+//         teams.push(team); 
+//     });
+//     return teams; 
+// }); 
+//DEBUGGING 
+function logSomething() {
+    console.log();
 }
-var Teams = /** @class */ (function () {
-    function Teams() {
-    }
-    return Teams;
-}());
-exports.Teams = Teams;
+//when the app starts call this function 
+var initApp = function () {
+    displayData();
+};
+document.addEventListener("DOMContentLoaded", initApp);

@@ -1,5 +1,5 @@
 //object of each element in the array from getTeamInfo (the teams from TBA)
-export interface TeamInfo {
+interface TeamInfo {
     key: "string",
     team_number: 0,
     nickname: "string",
@@ -10,7 +10,7 @@ export interface TeamInfo {
 }
 
 //Team object with the information we're using here 
-export interface Team {
+interface Team {
     teamNumber: string; 
     teamName: string; 
 }
@@ -28,10 +28,40 @@ const getTeamInfo = async function (): Promise<TeamInfo[]> {
     return teamInfo.json(); 
 }
 
-const initApp = (): void => {
-    const dataTable: HTMLTableElement = document.getElementById('dataTable') as HTMLTableElement; 
-    
+const displayData = () => {
+    getTeamInfo().then(teamMap => {
+        //access data table from loaded HTML doc 
+        const dataTable: HTMLTableElement = document.getElementById('dataTable') as HTMLTableElement;
+        
+        teamMap.forEach(team => {
+            const teamRow = dataTable.insertRow(); //make a new row for the team 
+            const teamNum = teamRow.insertCell(); //add cells to that row for teams number and name 
+            const teamName = teamRow.insertCell(); 
 
+            //assign team number and name 
+            teamNum.textContent = team.key.substring(3); 
+            teamName.textContent = team.nickname; 
+        }); 
+
+    }); 
+}
+
+// const data: TeamInfo[] = getTeamInfo().then(teamMap => {
+//     const teams: TeamInfo[] = []; 
+//     teamMap.forEach(team => {
+//         teams.push(team); 
+//     });
+//     return teams; 
+// }); 
+
+//DEBUGGING 
+function logSomething(): void {
+    console.log(); 
+}
+
+//when the app starts call this function 
+const initApp = (): void => {
+    displayData(); 
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
