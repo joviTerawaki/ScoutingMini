@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"styles.8986bff4.css","sourceRoot":"..","sourcesContent":["table, th, td {\n    border: 2 px solid; \n    border-color: white;\n    color: black;\n}\n\nbutton {\n    color: blue;\n}\n\ntr:nth-child(even) {\n    background-color: #D6EEEE;\n  }"]}

@@ -1,0 +1,15 @@
+table, th, td {
+    border: 2 px solid; 
+    border-color: white;
+    color: black;
+}
+
+button {
+    color: blue;
+}
+
+tr:nth-child(even) {
+    background-color: #D6EEEE;
+  }
+
+/*# sourceMappingURL=/styles.8986bff4.css.map */
