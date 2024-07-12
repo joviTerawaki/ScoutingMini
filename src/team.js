@@ -1,4 +1,4 @@
-// import { Constants } from "../constants"
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 //returns an array of teams with their info
 //ex. for 2024hiho it returns 34 elements each with a bunch of keys and values
 var getTeamInfo = function () {
@@ -78,6 +79,7 @@ var getTeamInsightsStatbotics = function (team) {
         });
     });
 };
+//get 2024hiho's even insights from TBA
 var getEventInsightsTBA = function () {
     return __awaiter(this, void 0, void 0, function () {
         var eventInsights;
@@ -101,6 +103,7 @@ var getEventInsightsTBA = function () {
         });
     });
 };
+//data on table
 var displayData = function () {
     getTeamInfo().then(function (teamMap) {
         //once data is received put it all on the table
@@ -139,9 +142,6 @@ function logSomething() {
             console.log("key: ".concat(key));
         }
     })));
-    // getTeamInfo().then(teams => {
-    //     console.log(`team info: ${JSON.stringify(teams)}`)
-    // })
 }
 //when the app starts call this function
 var initApp = function () {
