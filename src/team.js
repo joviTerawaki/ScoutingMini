@@ -1,3 +1,4 @@
+// import { Constants } from "../constants"
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,18 +35,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-//returns an array of teams with their info 
-//ex. for 2024hiho it returns 34 elements each with a bunch of keys and values 
+//returns an array of teams with their info
+//ex. for 2024hiho it returns 34 elements each with a bunch of keys and values
 var getTeamInfo = function () {
     return __awaiter(this, void 0, void 0, function () {
         var teamInfo;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, fetch('https://www.thebluealliance.com/api/v3/event/2024hiho/teams/simple', {
+                case 0: return [4 /*yield*/, fetch("https://www.thebluealliance.com/api/v3/event/2024hiho/teams/simple", {
                         headers: {
-                            'accept': 'application/json',
-                            'X-TBA-Auth-Key': '5MlTtCKI1kU8v8VGcAqJTt34YjypCWu8qVeihIaD1YWdqHO5Sm8Q5ix0gkNeEwuo'
-                        }
+                            accept: "application/json",
+                            "X-TBA-Auth-Key": "5MlTtCKI1kU8v8VGcAqJTt34YjypCWu8qVeihIaD1YWdqHO5Sm8Q5ix0gkNeEwuo",
+                        },
                     })];
                 case 1:
                     teamInfo = _a.sent();
@@ -54,38 +55,83 @@ var getTeamInfo = function () {
         });
     });
 };
-var displayData = function () {
-    getTeamInfo().then(function (teamMap) {
-        var dataTable = document.getElementById('dataTable');
-        teamMap.forEach(function (team) {
-            // const teamRow: HTMLTableRowElement = document.createElement('teamRow') as HTMLTableRowElement; 
-            // const teamNum: HTMLTableCellElement = document.createElement('teamNumber') as HTMLTableCellElement; 
-            // teamNum.textContent = team.key.substring(3); 
-            // const teamName: HTMLTableCellElement = document.createElement('teamName') as HTMLTableCellElement; 
-            // teamName.textContent = team.nickname; 
-            // teamRow.append(teamNum, teamName); 
-            // // teamRow.append(teamName); 
-            // dataTable.append(teamRow); 
-            var teamRow = dataTable.insertRow();
-            var teamNum = teamRow.insertCell();
-            var teamName = teamRow.insertCell();
-            teamNum.textContent = team.key.substring(3);
-            teamName.textContent = team.nickname;
+//get a single team's insight data from Statbotics 
+var getTeamInsightsStatbotics = function (team) {
+    return __awaiter(this, void 0, void 0, function () {
+        var teamInsights;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch("https://api.statbotics.io/v3/team_event/".concat(team, "/2024hiho"), {
+                        headers: {
+                            accept: "application/json",
+                        },
+                    })];
+                case 1:
+                    teamInsights = _a.sent();
+                    //if there is trouble fetching the data throw error
+                    if (!teamInsights.ok) {
+                        throw new Error("Error fetching data: ".concat(teamInsights.statusText));
+                    }
+                    return [4 /*yield*/, teamInsights.json()];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
         });
     });
 };
-// const data: TeamInfo[] = getTeamInfo().then(teamMap => {
-//     const teams: TeamInfo[] = []; 
-//     teamMap.forEach(team => {
-//         teams.push(team); 
-//     });
-//     return teams; 
-// }); 
-//DEBUGGING 
+var getEventInsightsTBA = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var eventInsights;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch("https://www.thebluealliance.com/api/v3/event/2024hiho/coprs", {
+                        headers: {
+                            accept: "application/json",
+                            "X-TBA-Auth-Key": "5MlTtCKI1kU8v8VGcAqJTt34YjypCWu8qVeihIaD1YWdqHO5Sm8Q5ix0gkNeEwuo",
+                        },
+                    })];
+                case 1:
+                    eventInsights = _a.sent();
+                    return [4 /*yield*/, eventInsights.json()];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+};
+var displayData = function () {
+    getTeamInfo().then(function (teamMap) {
+        //once data is received put it all on the table
+        var dataTable = document.getElementById(//access data table from loaded HTML doc
+        "dataTable");
+        teamMap.forEach(function (team) {
+            var teamRow = dataTable.insertRow(); //make a new row for the team
+            //add cells to that row for teams number and name
+            var teamNum = teamRow.insertCell();
+            var teamName = teamRow.insertCell();
+            var teamEPA = teamRow.insertCell();
+            //assign team number and name
+            teamNum.textContent = team.key.substring(3);
+            teamName.textContent = team.nickname;
+            //get insights using the data received above and put the teams EPA on the table 
+            getTeamInsightsStatbotics(team.key.substring(3)).then(function (insights) {
+                teamEPA.textContent = insights.epa.breakdown.total_points.mean.toString();
+            });
+        });
+    });
+};
+//DEBUGGING
 function logSomething() {
-    console.log();
+    console.log("insights returned: ".concat(getTeamInsightsStatbotics("2443").then(function (insights) {
+        console.log("stringified insights: ".concat(JSON.stringify(insights)));
+        console.log("insights: ".concat(insights));
+        console.log("epa: ".concat(insights.epa.breakdown.total_points.mean));
+        console.log("typeof insights: ".concat(typeof insights));
+        for (var key in insights) {
+            console.log("key: ".concat(key, ", value: ").concat(insights));
+        }
+        return insights;
+    })));
 }
-//when the app starts call this function 
+//when the app starts call this function
 var initApp = function () {
     displayData();
 };

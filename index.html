@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <button onclick="logSomething()">log something</button>
+        <button onclick="console.log(getTeamInsightsStatbotics('2443'))">
+            raw
+        </button>
+        <!-- <button onclick="console.log(getTeamInfo())">all teams</button> -->
 
-    <!-- <button onclick="logSomething()">log something</button>
-    <button onclick="console.log(getTeamInfo())">all teams</button> -->
+        <div>
+            <table id="dataTable">
+                <!-- append things to this table -->
+                <tr>
+                    <th>Team Number</th>
+                    <th>Team Name</th>
+                    <th>EPA</th>
+                    <th>OPR</th>
+                </tr>
+            </table>
+        </div>
 
-    <div>
-        <table id="dataTable"> <!-- append things to this table -->
-            <tr>
-                <th>Team Number</th> 
-                <th>Team Name</th> 
-            </tr>
-        </table>
-    </div>
-    
-    <script src="src/index.js"></script>
-    <script src="src/team.js"></script>
-    <link rel="stylesheet" href="styles.css" />
-</body>
+        <script src="src/index.js"></script>
+        <script src="src/team.js"></script>
+        <script src="constants.js"></script>
+        <link rel="stylesheet" href="styles.css" />
+    </body>
 </html>
