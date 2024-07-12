@@ -107,7 +107,8 @@ var displayData = function () {
             //add cells to that row for teams number and name
             var teamNum = teamRow.insertCell();
             var teamName = teamRow.insertCell();
-            var teamEPA = teamRow.insertCell();
+            var teamEPA = teamRow.insertCell(); //Statbotics 
+            var teamOPR = teamRow.insertCell(); //TBA 
             //assign team number and name
             teamNum.textContent = team.key.substring(3);
             teamName.textContent = team.nickname;
