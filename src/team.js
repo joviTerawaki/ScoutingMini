@@ -55,7 +55,7 @@ var getTeamInfo = function () {
         });
     });
 };
-//get a single team's insight data from Statbotics 
+//get a single team's insight data from Statbotics
 var getTeamInsightsStatbotics = function (team) {
     return __awaiter(this, void 0, void 0, function () {
         var teamInsights;
@@ -91,6 +91,10 @@ var getEventInsightsTBA = function () {
                     })];
                 case 1:
                     eventInsights = _a.sent();
+                    //if there is trouble fetching the data throw error
+                    if (!eventInsights.ok) {
+                        throw new Error("Error fetching data: ".concat(eventInsights.statusText));
+                    }
                     return [4 /*yield*/, eventInsights.json()];
                 case 2: return [2 /*return*/, _a.sent()];
             }
@@ -100,37 +104,44 @@ var getEventInsightsTBA = function () {
 var displayData = function () {
     getTeamInfo().then(function (teamMap) {
         //once data is received put it all on the table
-        var dataTable = document.getElementById(//access data table from loaded HTML doc
+        var dataTable = document.getElementById(
+        //access data table from loaded HTML doc
         "dataTable");
         teamMap.forEach(function (team) {
             var teamRow = dataTable.insertRow(); //make a new row for the team
             //add cells to that row for teams number and name
             var teamNum = teamRow.insertCell();
             var teamName = teamRow.insertCell();
-            var teamEPA = teamRow.insertCell(); //Statbotics 
-            var teamOPR = teamRow.insertCell(); //TBA 
+            var teamEPA = teamRow.insertCell(); //Statbotics
+            var teamOPR = teamRow.insertCell(); //TBA
             //assign team number and name
             teamNum.textContent = team.key.substring(3);
             teamName.textContent = team.nickname;
-            //get insights using the data received above and put the teams EPA on the table 
+            //get insights using the data received above and put the teams EPA on the table
             getTeamInsightsStatbotics(team.key.substring(3)).then(function (insights) {
-                teamEPA.textContent = insights.epa.breakdown.total_points.mean.toString();
+                teamEPA.textContent =
+                    insights.epa.breakdown.total_points.mean.toString();
+            });
+            getEventInsightsTBA().then(function (insights) {
+                teamOPR.textContent = insights["totalPoints"][team.key]
+                    .toFixed(2)
+                    .toString();
             });
         });
     });
 };
 //DEBUGGING
 function logSomething() {
-    console.log("insights returned: ".concat(getTeamInsightsStatbotics("2443").then(function (insights) {
-        console.log("stringified insights: ".concat(JSON.stringify(insights)));
-        console.log("insights: ".concat(insights));
-        console.log("epa: ".concat(insights.epa.breakdown.total_points.mean));
-        console.log("typeof insights: ".concat(typeof insights));
+    console.log("insights: ".concat(getEventInsightsTBA().then(function (insights) {
+        console.log("TBA insights: ".concat(JSON.stringify(insights)));
+        console.log("something: ".concat(insights["Amplification Rate"]["frc2443"]));
         for (var key in insights) {
-            console.log("key: ".concat(key, ", value: ").concat(insights));
+            console.log("key: ".concat(key));
         }
-        return insights;
     })));
+    // getTeamInfo().then(teams => {
+    //     console.log(`team info: ${JSON.stringify(teams)}`)
+    // })
 }
 //when the app starts call this function
 var initApp = function () {

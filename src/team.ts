@@ -11,7 +11,7 @@ interface TeamInfo {
     country: "string";
 }
 
-//copied and pasted from the example on Statbotics 
+//copied and pasted from the example on Statbotics
 interface TeamInsightsStatbotics {
     team: string;
     year: number;
@@ -180,21 +180,163 @@ interface TeamInsightsStatbotics {
     district_points: null;
 }
 
+//to use: insights["DesiredData"]["TeamKey"]
 interface EventInsightsTBA {
-    additionalProp1: {
-        additionalProp1: 0;
-        additionalProp2: 0;
-        additionalProp3: 0;
+    "Amplification Rate": {
+        [teamId: string]: number;
     };
-    additionalProp2: {
-        additionalProp1: 0;
-        additionalProp2: 0;
-        additionalProp3: 0;
+    "Total Auto Game Pieces": {
+        [teamId: string]: number;
     };
-    additionalProp3: {
-        additionalProp1: 0;
-        additionalProp2: 0;
-        additionalProp3: 0;
+    "Total Mic": {
+        [teamId: string]: number;
+    };
+    "Total Overall Game Pieces": {
+        [teamId: string]: number;
+    };
+    "Total Teleop Game Pieces": {
+        [teamId: string]: number;
+    };
+    "Total Trap": {
+        [teamId: string]: number;
+    };
+    adjustPoints: {
+        [teamId: string]: number;
+    };
+    autoAmpNoteCount: {
+        [teamId: string]: number;
+    };
+    autoAmpNotePoints: {
+        [teamId: string]: number;
+    };
+    autoLeavePoints: {
+        [teamId: string]: number;
+    };
+    autoPoints: {
+        [teamId: string]: number;
+    };
+    autoSpeakerNoteCount: {
+        [teamId: string]: number;
+    };
+    autoSpeakerNotePoints: {
+        [teamId: string]: number;
+    };
+    autoTotalNotePoints: {
+        [teamId: string]: number;
+    };
+    coopNotePlayed: {
+        [teamId: string]: number;
+    };
+    coopertitionBonusAchieved: {
+        [teamId: string]: number;
+    };
+    coopertitionCriteriaMet: {
+        [teamId: string]: number;
+    };
+    endGameHarmonyPoints: {
+        [teamId: string]: number;
+    };
+    endGameNoteInTrapPoints: {
+        [teamId: string]: number;
+    };
+    endGameOnStagePoints: {
+        [teamId: string]: number;
+    };
+    endGameParkPoints: {
+        [teamId: string]: number;
+    };
+    endGameSpotLightBonusPoints: {
+        [teamId: string]: number;
+    };
+    endGameTotalStagePoints: {
+        [teamId: string]: number;
+    };
+    ensembleBonusAchieved: {
+        [teamId: string]: number;
+    };
+    ensembleBonusOnStageRobotsThreshold: {
+        [teamId: string]: number;
+    };
+    ensembleBonusStagePointsThreshold: {
+        [teamId: string]: number;
+    };
+    foulCount: {
+        [teamId: string]: number;
+    };
+    foulPoints: {
+        [teamId: string]: number;
+    };
+    g206Penalty: {
+        [teamId: string]: number;
+    };
+    g408Penalty: {
+        [teamId: string]: number;
+    };
+    g424Penalty: {
+        [teamId: string]: number;
+    };
+    melodyBonusAchieved: {
+        [teamId: string]: number;
+    };
+    melodyBonusThreshold: {
+        [teamId: string]: number;
+    };
+    melodyBonusThresholdCoop: {
+        [teamId: string]: number;
+    };
+    melodyBonusThresholdNonCoop: {
+        [teamId: string]: number;
+    };
+    micCenterStage: {
+        [teamId: string]: number;
+    };
+    micStageLeft: {
+        [teamId: string]: number;
+    };
+    micStageRight: {
+        [teamId: string]: number;
+    };
+    rp: {
+        [teamId: string]: number;
+    };
+    techFoulCount: {
+        [teamId: string]: number;
+    };
+    teleopAmpNoteCount: {
+        [teamId: string]: number;
+    };
+    teleopAmpNotePoints: {
+        [teamId: string]: number;
+    };
+    teleopPoints: {
+        [teamId: string]: number;
+    };
+    teleopSpeakerNoteAmplifiedCount: {
+        [teamId: string]: number;
+    };
+    teleopSpeakerNoteAmplifiedPoints: {
+        [teamId: string]: number;
+    };
+    teleopSpeakerNoteCount: {
+        [teamId: string]: number;
+    };
+    teleopSpeakerNotePoints: {
+        [teamId: string]: number;
+    };
+    teleopTotalNotePoints: {
+        [teamId: string]: number;
+    };
+    totalPoints: {
+        [teamId: string]: number;
+    };
+    trapCenterStage: {
+        [teamId: string]: number;
+    };
+    trapStageLeft: {
+        [teamId: string]: number;
+    };
+    trapStageRight: {
+        [teamId: string]: number;
     };
 }
 
@@ -215,7 +357,7 @@ const getTeamInfo = async function (): Promise<TeamInfo[]> {
     return teamInfo.json();
 };
 
-//get a single team's insight data from Statbotics 
+//get a single team's insight data from Statbotics
 const getTeamInsightsStatbotics = async function (
     team: string
 ): Promise<TeamInsightsStatbotics> {
@@ -248,13 +390,19 @@ const getEventInsightsTBA = async function (): Promise<EventInsightsTBA> {
         }
     );
 
+    //if there is trouble fetching the data throw error
+    if (!eventInsights.ok) {
+        throw new Error(`Error fetching data: ${eventInsights.statusText}`);
+    }
+
     return await eventInsights.json();
 };
 
 const displayData = () => {
     getTeamInfo().then((teamMap) => {
         //once data is received put it all on the table
-        const dataTable: HTMLTableElement = document.getElementById( //access data table from loaded HTML doc
+        const dataTable: HTMLTableElement = document.getElementById(
+            //access data table from loaded HTML doc
             "dataTable"
         ) as HTMLTableElement;
 
@@ -262,21 +410,28 @@ const displayData = () => {
             const teamRow = dataTable.insertRow(); //make a new row for the team
 
             //add cells to that row for teams number and name
-            const teamNum = teamRow.insertCell(); 
+            const teamNum = teamRow.insertCell();
             const teamName = teamRow.insertCell();
-            const teamEPA = teamRow.insertCell(); //Statbotics 
-            const teamOPR = teamRow.insertCell(); //TBA 
+            const teamEPA = teamRow.insertCell(); //Statbotics
+            const teamOPR = teamRow.insertCell(); //TBA
 
             //assign team number and name
             teamNum.textContent = team.key.substring(3);
             teamName.textContent = team.nickname;
 
-            //get insights using the data received above and put the teams EPA on the table 
+            //get insights using the data received above and put the teams EPA on the table
             getTeamInsightsStatbotics(team.key.substring(3)).then(
                 (insights) => {
-                    teamEPA.textContent = insights.epa.breakdown.total_points.mean.toString();
+                    teamEPA.textContent =
+                        insights.epa.breakdown.total_points.mean.toString();
                 }
             );
+
+            getEventInsightsTBA().then((insights) => {
+                teamOPR.textContent = insights["totalPoints"][team.key]
+                    .toFixed(2)
+                    .toString();
+            });
         });
     });
 };
@@ -284,23 +439,21 @@ const displayData = () => {
 //DEBUGGING
 function logSomething(): void {
     console.log(
-        `insights returned: ${getTeamInsightsStatbotics("2443").then(
-            (insights) => {
-                console.log(
-                    `stringified insights: ${JSON.stringify(insights)}`
-                );
-                console.log(`insights: ${insights}`);
-                console.log(`epa: ${insights.epa.breakdown.total_points.mean}`);
-                console.log(`typeof insights: ${typeof insights}`);
+        `insights: ${getEventInsightsTBA().then((insights) => {
+            console.log(`TBA insights: ${JSON.stringify(insights)}`);
+            console.log(
+                `something: ${insights["Amplification Rate"]["frc2443"]}`
+            );
 
-                for (const key in insights) {
-                    console.log(`key: ${key}, value: ${insights}`);
-                }
-
-                return insights;
+            for (const key in insights) {
+                console.log(`key: ${key}`);
             }
-        )}`
+        })}`
     );
+
+    // getTeamInfo().then(teams => {
+    //     console.log(`team info: ${JSON.stringify(teams)}`)
+    // })
 }
 
 //when the app starts call this function
