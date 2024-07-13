@@ -31,9 +31,8 @@ var displayData = function () {
                 newTeam.epa = insights.epa.breakdown.total_points.mean;
             });
             (0, apiData_1.getEventInsightsTBA)().then(function (insights) {
-                teamOPR.textContent = insights["totalPoints"][team.key]
-                    .toFixed(2)
-                    .toString();
+                teamOPR.textContent =
+                    insights["totalPoints"][team.key].toFixed(2);
                 newTeam.opr = insights["totalPoints"][team.key];
             });
         });

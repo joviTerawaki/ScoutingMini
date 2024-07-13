@@ -50,9 +50,8 @@ const displayData = () => {
             );
 
             getEventInsightsTBA().then((insights) => {
-                teamOPR.textContent = insights["totalPoints"][team.key]
-                    .toFixed(2)
-                    .toString();
+                teamOPR.textContent =
+                    insights["totalPoints"][team.key].toFixed(2);
                 newTeam.opr = insights["totalPoints"][team.key];
             });
         });
