@@ -2,7 +2,10 @@ import {
     TeamInsightsStatbotics,
     EventInsightsTBA,
     TeamInfo,
+    Team,
 } from "../constants";
+
+let teamsArr: Team[] = [];
 
 //returns an array of teams with their info
 //ex. for 2024hiho it returns 34 elements each with a bunch of keys and values
@@ -73,6 +76,7 @@ const displayData = () => {
         ) as HTMLTableElement;
 
         teamMap.forEach((team) => {
+            let newTeam = new Team(); //create new Team obj
             const teamRow = dataTable.insertRow(); //make a new row for the team
 
             //add cells to that row for teams number and name
@@ -85,11 +89,16 @@ const displayData = () => {
             teamNum.textContent = team.key.substring(3);
             teamName.textContent = team.nickname;
 
+            //adding team number and name to array of teams
+            newTeam.teamNumber = team.team_number;
+            newTeam.teamName = team.nickname;
+
             //get insights using the data received above and put the teams EPA on the table
             getTeamInsightsStatbotics(team.key.substring(3)).then(
                 (insights) => {
                     teamEPA.textContent =
                         insights.epa.breakdown.total_points.mean.toString();
+                    newTeam.epa = insights.epa.breakdown.total_points.mean;
                 }
             );
 
@@ -97,6 +106,7 @@ const displayData = () => {
                 teamOPR.textContent = insights["totalPoints"][team.key]
                     .toFixed(2)
                     .toString();
+                newTeam.opr = insights["totalPoints"][team.key];
             });
         });
     });

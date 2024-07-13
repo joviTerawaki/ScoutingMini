@@ -337,3 +337,11 @@ export interface EventInsightsTBA {
         [teamId: string]: number;
     };
 }
+
+// Team obj that holds information gathered from the apis
+export class Team {
+    teamNumber: number = 0;
+    teamName: string = "";
+    epa: number = 0;
+    opr: number = 0;
+}
