@@ -123,6 +123,18 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Team = void 0;
+// Team obj that holds information gathered from the apis
+var Team = /** @class */function () {
+  function Team() {
+    this.teamNumber = 0;
+    this.teamName = "";
+    this.epa = 0;
+    this.opr = 0;
+  }
+  return Team;
+}();
+exports.Team = Team;
 },{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -148,7 +160,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53748" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60826" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

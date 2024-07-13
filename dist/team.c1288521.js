@@ -117,7 +117,25 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/team.js":[function(require,module,exports) {
+})({"constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Team = void 0;
+// Team obj that holds information gathered from the apis
+var Team = /** @class */function () {
+  function Team() {
+    this.teamNumber = 0;
+    this.teamName = "";
+    this.epa = 0;
+    this.opr = 0;
+  }
+  return Team;
+}();
+exports.Team = Team;
+},{}],"src/apiData.js":[function(require,module,exports) {
 "use strict";
 
 var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
@@ -238,6 +256,7 @@ var __generator = this && this.__generator || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getEventInsightsTBA = exports.getTeamInsightsStatbotics = exports.getTeamInfo = void 0;
 //returns an array of teams with their info
 //ex. for 2024hiho it returns 34 elements each with a bunch of keys and values
 var getTeamInfo = function getTeamInfo() {
@@ -259,6 +278,7 @@ var getTeamInfo = function getTeamInfo() {
     });
   });
 };
+exports.getTeamInfo = getTeamInfo;
 //get a single team's insight data from Statbotics
 var getTeamInsightsStatbotics = function getTeamInsightsStatbotics(team) {
   return __awaiter(this, void 0, void 0, function () {
@@ -284,6 +304,7 @@ var getTeamInsightsStatbotics = function getTeamInsightsStatbotics(team) {
     });
   });
 };
+exports.getTeamInsightsStatbotics = getTeamInsightsStatbotics;
 //get 2024hiho's even insights from TBA
 var getEventInsightsTBA = function getEventInsightsTBA() {
   return __awaiter(this, void 0, void 0, function () {
@@ -310,14 +331,25 @@ var getEventInsightsTBA = function getEventInsightsTBA() {
     });
   });
 };
+exports.getEventInsightsTBA = getEventInsightsTBA;
+},{}],"src/team.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var constants_1 = require("../constants");
+var apiData_1 = require("./apiData");
+var teamsArr = [];
 //data on table
 var displayData = function displayData() {
-  getTeamInfo().then(function (teamMap) {
+  (0, apiData_1.getTeamInfo)().then(function (teamMap) {
     //once data is received put it all on the table
     var dataTable = document.getElementById(
     //access data table from loaded HTML doc
     "dataTable");
     teamMap.forEach(function (team) {
+      var newTeam = new constants_1.Team(); //create new Team obj
       var teamRow = dataTable.insertRow(); //make a new row for the team
       //add cells to that row for teams number and name
       var teamNum = teamRow.insertCell();
@@ -327,19 +359,24 @@ var displayData = function displayData() {
       //assign team number and name
       teamNum.textContent = team.key.substring(3);
       teamName.textContent = team.nickname;
+      //adding team number and name to array of teams
+      newTeam.teamNumber = team.team_number;
+      newTeam.teamName = team.nickname;
       //get insights using the data received above and put the teams EPA on the table
-      getTeamInsightsStatbotics(team.key.substring(3)).then(function (insights) {
+      (0, apiData_1.getTeamInsightsStatbotics)(team.key.substring(3)).then(function (insights) {
         teamEPA.textContent = insights.epa.breakdown.total_points.mean.toString();
+        newTeam.epa = insights.epa.breakdown.total_points.mean;
       });
-      getEventInsightsTBA().then(function (insights) {
+      (0, apiData_1.getEventInsightsTBA)().then(function (insights) {
         teamOPR.textContent = insights["totalPoints"][team.key].toFixed(2).toString();
+        newTeam.opr = insights["totalPoints"][team.key];
       });
     });
   });
 };
 //DEBUGGING
 function logSomething() {
-  console.log("insights: ".concat(getEventInsightsTBA().then(function (insights) {
+  console.log("insights: ".concat((0, apiData_1.getEventInsightsTBA)().then(function (insights) {
     console.log("TBA insights: ".concat(JSON.stringify(insights)));
     console.log("something: ".concat(insights["Amplification Rate"]["frc2443"]));
     for (var key in insights) {
@@ -352,7 +389,7 @@ var initApp = function initApp() {
   displayData();
 };
 document.addEventListener("DOMContentLoaded", initApp);
-},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../constants":"constants.js","./apiData":"src/apiData.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -377,7 +414,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53748" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60826" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
