@@ -23,7 +23,6 @@ const displayData = () => {
         ) as HTMLTableElement;
 
         teamMap.forEach((team) => {
-            let newTeam = new Team(); //create new Team obj
             const teamRow = dataTable.insertRow(); //make a new row for the team
 
             //add cells to that row for teams number and name
@@ -37,22 +36,18 @@ const displayData = () => {
             teamName.textContent = team.nickname;
 
             //adding team number and name to array of teams
-            newTeam.teamNumber = team.team_number;
-            newTeam.teamName = team.nickname;
 
             //get insights using the data received above and put the teams EPA on the table
             getTeamInsightsStatbotics(team.key.substring(3)).then(
                 (insights) => {
                     teamEPA.textContent =
                         insights.epa.breakdown.total_points.mean.toString();
-                    newTeam.epa = insights.epa.breakdown.total_points.mean;
                 }
             );
 
             getEventInsightsTBA().then((insights) => {
                 teamOPR.textContent =
                     insights["totalPoints"][team.key].toFixed(2);
-                newTeam.opr = insights["totalPoints"][team.key];
             });
         });
     });

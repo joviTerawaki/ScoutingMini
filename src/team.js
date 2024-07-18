@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var constants_1 = require("../constants");
 var apiData_1 = require("./apiData");
 var teamsArr = [];
 //data on table
@@ -11,7 +10,6 @@ var displayData = function () {
         //access data table from loaded HTML doc
         "dataTable");
         teamMap.forEach(function (team) {
-            var newTeam = new constants_1.Team(); //create new Team obj
             var teamRow = dataTable.insertRow(); //make a new row for the team
             //add cells to that row for teams number and name
             var teamNum = teamRow.insertCell();
@@ -22,18 +20,14 @@ var displayData = function () {
             teamNum.textContent = team.key.substring(3);
             teamName.textContent = team.nickname;
             //adding team number and name to array of teams
-            newTeam.teamNumber = team.team_number;
-            newTeam.teamName = team.nickname;
             //get insights using the data received above and put the teams EPA on the table
             (0, apiData_1.getTeamInsightsStatbotics)(team.key.substring(3)).then(function (insights) {
                 teamEPA.textContent =
                     insights.epa.breakdown.total_points.mean.toString();
-                newTeam.epa = insights.epa.breakdown.total_points.mean;
             });
             (0, apiData_1.getEventInsightsTBA)().then(function (insights) {
                 teamOPR.textContent =
                     insights["totalPoints"][team.key].toFixed(2);
-                newTeam.opr = insights["totalPoints"][team.key];
             });
         });
     });

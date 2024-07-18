@@ -340,8 +340,20 @@ export interface EventInsightsTBA {
 
 // Team obj that holds information gathered from the apis
 export class Team {
-    teamNumber: number = 0;
-    teamName: string = "";
-    epa: number = 0;
-    opr: number = 0;
+    teamNumber: number;
+    teamName: string;
+    epa: number;
+    opr: number;
+
+    constructor(
+        teamNumber: number,
+        teamName: string,
+        epa: number,
+        opr: number
+    ) {
+        this.teamNumber = teamNumber;
+        this.teamName = teamName;
+        this.epa = epa;
+        this.opr = opr;
+    }
 }

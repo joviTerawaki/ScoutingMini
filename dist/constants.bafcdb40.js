@@ -126,11 +126,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.Team = void 0;
 // Team obj that holds information gathered from the apis
 var Team = /** @class */function () {
-  function Team() {
-    this.teamNumber = 0;
-    this.teamName = "";
-    this.epa = 0;
-    this.opr = 0;
+  function Team(teamNumber, teamName, epa, opr) {
+    this.teamNumber = teamNumber;
+    this.teamName = teamName;
+    this.epa = epa;
+    this.opr = opr;
   }
   return Team;
 }();
@@ -160,7 +160,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60826" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56199" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

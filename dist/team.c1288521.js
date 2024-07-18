@@ -117,25 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"constants.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Team = void 0;
-// Team obj that holds information gathered from the apis
-var Team = /** @class */function () {
-  function Team() {
-    this.teamNumber = 0;
-    this.teamName = "";
-    this.epa = 0;
-    this.opr = 0;
-  }
-  return Team;
-}();
-exports.Team = Team;
-},{}],"src/apiData.js":[function(require,module,exports) {
+})({"src/apiData.js":[function(require,module,exports) {
 "use strict";
 
 var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
@@ -338,7 +320,6 @@ exports.getEventInsightsTBA = getEventInsightsTBA;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var constants_1 = require("../constants");
 var apiData_1 = require("./apiData");
 var teamsArr = [];
 //data on table
@@ -349,7 +330,6 @@ var displayData = function displayData() {
     //access data table from loaded HTML doc
     "dataTable");
     teamMap.forEach(function (team) {
-      var newTeam = new constants_1.Team(); //create new Team obj
       var teamRow = dataTable.insertRow(); //make a new row for the team
       //add cells to that row for teams number and name
       var teamNum = teamRow.insertCell();
@@ -360,16 +340,12 @@ var displayData = function displayData() {
       teamNum.textContent = team.key.substring(3);
       teamName.textContent = team.nickname;
       //adding team number and name to array of teams
-      newTeam.teamNumber = team.team_number;
-      newTeam.teamName = team.nickname;
       //get insights using the data received above and put the teams EPA on the table
       (0, apiData_1.getTeamInsightsStatbotics)(team.key.substring(3)).then(function (insights) {
         teamEPA.textContent = insights.epa.breakdown.total_points.mean.toString();
-        newTeam.epa = insights.epa.breakdown.total_points.mean;
       });
       (0, apiData_1.getEventInsightsTBA)().then(function (insights) {
         teamOPR.textContent = insights["totalPoints"][team.key].toFixed(2);
-        newTeam.opr = insights["totalPoints"][team.key];
       });
     });
   });
@@ -389,7 +365,7 @@ var initApp = function initApp() {
   displayData();
 };
 document.addEventListener("DOMContentLoaded", initApp);
-},{"../constants":"constants.js","./apiData":"src/apiData.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./apiData":"src/apiData.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -414,7 +390,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60826" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56199" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
