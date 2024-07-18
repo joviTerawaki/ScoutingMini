@@ -23,51 +23,58 @@ const displayData = () => {
         ) as HTMLTableElement;
 
         teamMap.forEach((team) => {
-            const teamRow = dataTable.insertRow(); //make a new row for the team
+            let newTeam = new Team();
 
-            //add cells to that row for teams number and name
-            const teamNum = teamRow.insertCell();
-            const teamName = teamRow.insertCell();
-            const teamEPA = teamRow.insertCell(); //Statbotics
-            const teamOPR = teamRow.insertCell(); //TBA
+            newTeam.teamNumber = team.team_number;
+            newTeam.teamName = team.nickname;
+            // const teamRow = dataTable.insertRow(); //make a new row for the team
 
-            //assign team number and name
-            teamNum.textContent = team.key.substring(3);
-            teamName.textContent = team.nickname;
+            // //add cells to that row for teams number and name
+            // const teamNum = teamRow.insertCell();
+            // const teamName = teamRow.insertCell();
+            // const teamEPA = teamRow.insertCell(); //Statbotics
+            // const teamOPR = teamRow.insertCell(); //TBA
+
+            // //assign team number and name
+            // teamNum.textContent = team.key.substring(3);
+            // teamName.textContent = team.nickname;
 
             //adding team number and name to array of teams
 
             //get insights using the data received above and put the teams EPA on the table
             getTeamInsightsStatbotics(team.key.substring(3)).then(
                 (insights) => {
-                    teamEPA.textContent =
-                        insights.epa.breakdown.total_points.mean.toString();
+                    newTeam.epa = insights.epa.breakdown.total_points.mean;
+                    // teamEPA.textContent =
+                    //     insights.epa.breakdown.total_points.mean.toString();
                 }
             );
 
             getEventInsightsTBA().then((insights) => {
-                teamOPR.textContent =
-                    insights["totalPoints"][team.key].toFixed(2);
+                newTeam.opr = insights["totalPoints"][team.key].toFixed(
+                    2
+                ) as unknown as number;
+                // teamOPR.textContent =
+                //     insights["totalPoints"][team.key].toFixed(2);
             });
+
+            teamsArr.push(newTeam);
         });
     });
 };
 
 //DEBUGGING
-function logSomething(): void {
-    console.log(
-        `insights: ${getEventInsightsTBA().then((insights) => {
-            console.log(`TBA insights: ${JSON.stringify(insights)}`);
-            console.log(
-                `something: ${insights["Amplification Rate"]["frc2443"]}`
-            );
+const logSomethingButton: HTMLButtonElement = document.getElementById(
+    "logSomethingButton"
+) as HTMLButtonElement;
 
-            for (const key in insights) {
-                console.log(`key: ${key}`);
-            }
-        })}`
-    );
+function logSomething(): void {
+    teamsArr.forEach((team) => {
+        console.log(team.teamName);
+    });
 }
+
+logSomethingButton.addEventListener("click", () => logSomething());
 
 //when the app starts call this function
 const initApp = (): void => {
