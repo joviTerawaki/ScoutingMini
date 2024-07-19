@@ -13,40 +13,25 @@ import {
 
 let teamsArr: Team[] = [];
 
-//data on table
-const displayData = () => {
-    getTeamInfo().then((teamMap) => {
-        //once data is received put it all on the table
-        const dataTable: HTMLTableElement = document.getElementById(
-            //access data table from loaded HTML doc
-            "dataTable"
-        ) as HTMLTableElement;
+//once data is received put it all on the table
+const dataTable: HTMLTableElement = document.getElementById(
+    //access data table from loaded HTML doc
+    "dataTable"
+) as HTMLTableElement;
 
+// get data from apis and store them in an array of Team objects
+const getData = () => {
+    getTeamInfo().then((teamMap) => {
         teamMap.forEach((team) => {
             let newTeam = new Team();
 
             newTeam.teamNumber = team.team_number;
             newTeam.teamName = team.nickname;
-            // const teamRow = dataTable.insertRow(); //make a new row for the team
-
-            // //add cells to that row for teams number and name
-            // const teamNum = teamRow.insertCell();
-            // const teamName = teamRow.insertCell();
-            // const teamEPA = teamRow.insertCell(); //Statbotics
-            // const teamOPR = teamRow.insertCell(); //TBA
-
-            // //assign team number and name
-            // teamNum.textContent = team.key.substring(3);
-            // teamName.textContent = team.nickname;
-
-            //adding team number and name to array of teams
 
             //get insights using the data received above and put the teams EPA on the table
             getTeamInsightsStatbotics(team.key.substring(3)).then(
                 (insights) => {
                     newTeam.epa = insights.epa.breakdown.total_points.mean;
-                    // teamEPA.textContent =
-                    //     insights.epa.breakdown.total_points.mean.toString();
                 }
             );
 
@@ -54,12 +39,58 @@ const displayData = () => {
                 newTeam.opr = insights["totalPoints"][team.key].toFixed(
                     2
                 ) as unknown as number;
-                // teamOPR.textContent =
-                //     insights["totalPoints"][team.key].toFixed(2);
             });
 
             teamsArr.push(newTeam);
         });
+        generateTable();
+    });
+};
+
+//create rows of team data
+function generateTable(): void {
+    teamsArr.forEach((team) => {
+        const teamRow = dataTable.insertRow();
+        teamRow.id = `row - ${team.teamNumber.toString()}`;
+
+        const teamNum = teamRow.insertCell();
+        teamNum.id = `num - ${team.teamNumber.toString()}`;
+        const teamName = teamRow.insertCell();
+        teamName.id = `name - ${team.teamNumber.toString()}`;
+        const teamEPA = teamRow.insertCell(); //statbotics
+        teamEPA.id = `epa - ${team.teamNumber.toString()}`;
+        const teamOPR = teamRow.insertCell(); //TBA
+        teamOPR.id = `opr - ${team.teamNumber.toString()}`;
+
+        teamNum.textContent = team.teamNumber.toString();
+        teamName.textContent = team.teamName;
+        teamEPA.textContent = team.epa.toString();
+        teamOPR.textContent = team.opr.toString();
+    });
+}
+
+const updateTable = () => {
+    teamsArr.forEach((team) => {
+        const teamRow: HTMLTableRowElement = document.getElementById(
+            `row - ${team.teamNumber.toString()}`
+        ) as HTMLTableRowElement;
+        const teamNum: HTMLTableCellElement = document.getElementById(
+            `num - ${team.teamNumber.toString()}`
+        ) as HTMLTableCellElement;
+        const teamName: HTMLTableCellElement = document.getElementById(
+            `name - ${team.teamNumber.toString()}`
+        ) as HTMLTableCellElement;
+        const teamEPA: HTMLTableCellElement = document.getElementById(
+            `epa - ${team.teamNumber.toString()}`
+        ) as HTMLTableCellElement;
+        const teamOPR: HTMLTableCellElement = document.getElementById(
+            `opr - ${team.teamNumber.toString()}`
+        ) as HTMLTableCellElement;
+
+        teamNum.textContent = team.teamNumber.toString();
+        teamName.textContent = team.teamName;
+        teamEPA.textContent = team.epa.toString();
+        teamOPR.textContent = team.opr.toString();
     });
 };
 
@@ -69,16 +100,16 @@ const logSomethingButton: HTMLButtonElement = document.getElementById(
 ) as HTMLButtonElement;
 
 function logSomething(): void {
-    teamsArr.forEach((team) => {
-        console.log(team.teamName);
-    });
+    updateTable();
 }
 
 logSomethingButton.addEventListener("click", () => logSomething());
 
 //when the app starts call this function
 const initApp = (): void => {
-    displayData();
+    getData();
 };
+
+const intervalId = setInterval(updateTable, 500);
 
 document.addEventListener("DOMContentLoaded", initApp);
