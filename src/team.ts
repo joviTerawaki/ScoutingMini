@@ -11,14 +11,15 @@ import {
     getEventInsightsTBA,
 } from "./apiData";
 
+/* * * VARS * * */
+//TABLE
 let teamsArr: Team[] = [];
-
-//once data is received put it all on the table
 const dataTable: HTMLTableElement = document.getElementById(
     //access data table from loaded HTML doc
     "dataTable"
 ) as HTMLTableElement;
 
+/* * * FUNCTIONS * * */
 // get data from apis and store them in an array of Team objects
 const getData = () => {
     getTeamInfo().then((teamMap) => {
@@ -47,11 +48,12 @@ const getData = () => {
     });
 };
 
-//create rows of team data
+//create rows of team data based on order of array
 function generateTable(): void {
     teamsArr.forEach((team) => {
         const teamRow = dataTable.insertRow();
         teamRow.id = `row - ${team.teamNumber.toString()}`;
+        teamRow.className = "";
 
         const teamNum = teamRow.insertCell();
         teamNum.id = `num - ${team.teamNumber.toString()}`;
@@ -69,6 +71,7 @@ function generateTable(): void {
     });
 }
 
+//update the table data using the team number
 const updateTable = () => {
     teamsArr.forEach((team) => {
         const teamRow: HTMLTableRowElement = document.getElementById(

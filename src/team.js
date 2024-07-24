@@ -2,12 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var constants_1 = require("../constants");
 var apiData_1 = require("./apiData");
+/* * * VARS * * */
+//TABLE
 var teamsArr = [];
-//once data is received put it all on the table
 var dataTable = document.getElementById(
 //access data table from loaded HTML doc
 "dataTable");
-//data on table
+/* * * FUNCTIONS * * */
+// get data from apis and store them in an array of Team objects
 var getData = function () {
     (0, apiData_1.getTeamInfo)().then(function (teamMap) {
         teamMap.forEach(function (team) {
@@ -26,10 +28,12 @@ var getData = function () {
         generateTable();
     });
 };
+//create rows of team data based on order of array
 function generateTable() {
     teamsArr.forEach(function (team) {
         var teamRow = dataTable.insertRow();
         teamRow.id = "row - ".concat(team.teamNumber.toString());
+        teamRow.className = "";
         var teamNum = teamRow.insertCell();
         teamNum.id = "num - ".concat(team.teamNumber.toString());
         var teamName = teamRow.insertCell();
@@ -44,6 +48,7 @@ function generateTable() {
         teamOPR.textContent = team.opr.toString();
     });
 }
+//update the table data using the team number
 var updateTable = function () {
     teamsArr.forEach(function (team) {
         var teamRow = document.getElementById("row - ".concat(team.teamNumber.toString()));
