@@ -117,7 +117,80 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/apiData.js":[function(require,module,exports) {
+})({"constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Team = void 0;
+var Team = /** @class */function () {
+  function Team(_teamNumber, _teamName, _epa, _opr) {
+    if (_teamNumber === void 0) {
+      _teamNumber = 0;
+    }
+    if (_teamName === void 0) {
+      _teamName = "";
+    }
+    if (_epa === void 0) {
+      _epa = 0;
+    }
+    if (_opr === void 0) {
+      _opr = 0;
+    }
+    this._teamNumber = _teamNumber;
+    this._teamName = _teamName;
+    this._epa = _epa;
+    this._opr = _opr;
+    // this.teamNumber = _teamNumber;
+    // this.teamName = _teamName;
+    // this.epa = _epa;
+    // this.opr = _opr;
+  }
+  Object.defineProperty(Team.prototype, "teamNumber", {
+    get: function get() {
+      return this._teamNumber;
+    },
+    set: function set(num) {
+      this._teamNumber = num;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Team.prototype, "teamName", {
+    get: function get() {
+      return this._teamName;
+    },
+    set: function set(name) {
+      this._teamName = name;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Team.prototype, "epa", {
+    get: function get() {
+      return this._epa;
+    },
+    set: function set(epa) {
+      this._epa = epa;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Team.prototype, "opr", {
+    get: function get() {
+      return this._opr;
+    },
+    set: function set(opr) {
+      this._opr = opr;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  return Team;
+}();
+exports.Team = Team;
+},{}],"src/apiData.js":[function(require,module,exports) {
 "use strict";
 
 var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
@@ -320,52 +393,83 @@ exports.getEventInsightsTBA = getEventInsightsTBA;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var constants_1 = require("../constants");
 var apiData_1 = require("./apiData");
+/* * * VARS * * */
+//TABLE
 var teamsArr = [];
-//data on table
-var displayData = function displayData() {
+var dataTable = document.getElementById(
+//access data table from loaded HTML doc
+"dataTable");
+/* * * FUNCTIONS * * */
+// get data from apis and store them in an array of Team objects
+var getData = function getData() {
   (0, apiData_1.getTeamInfo)().then(function (teamMap) {
-    //once data is received put it all on the table
-    var dataTable = document.getElementById(
-    //access data table from loaded HTML doc
-    "dataTable");
     teamMap.forEach(function (team) {
-      var teamRow = dataTable.insertRow(); //make a new row for the team
-      //add cells to that row for teams number and name
-      var teamNum = teamRow.insertCell();
-      var teamName = teamRow.insertCell();
-      var teamEPA = teamRow.insertCell(); //Statbotics
-      var teamOPR = teamRow.insertCell(); //TBA
-      //assign team number and name
-      teamNum.textContent = team.key.substring(3);
-      teamName.textContent = team.nickname;
-      //adding team number and name to array of teams
+      var newTeam = new constants_1.Team();
+      newTeam.teamNumber = team.team_number;
+      newTeam.teamName = team.nickname;
       //get insights using the data received above and put the teams EPA on the table
       (0, apiData_1.getTeamInsightsStatbotics)(team.key.substring(3)).then(function (insights) {
-        teamEPA.textContent = insights.epa.breakdown.total_points.mean.toString();
+        newTeam.epa = insights.epa.breakdown.total_points.mean;
       });
       (0, apiData_1.getEventInsightsTBA)().then(function (insights) {
-        teamOPR.textContent = insights["totalPoints"][team.key].toFixed(2);
+        newTeam.opr = insights["totalPoints"][team.key].toFixed(2);
       });
+      teamsArr.push(newTeam);
     });
+    generateTable();
+  });
+};
+//create rows of team data based on order of array
+function generateTable() {
+  teamsArr.forEach(function (team) {
+    var teamRow = dataTable.insertRow();
+    teamRow.id = "row - ".concat(team.teamNumber.toString());
+    teamRow.className = "";
+    var teamNum = teamRow.insertCell();
+    teamNum.id = "num - ".concat(team.teamNumber.toString());
+    var teamName = teamRow.insertCell();
+    teamName.id = "name - ".concat(team.teamNumber.toString());
+    var teamEPA = teamRow.insertCell(); //statbotics
+    teamEPA.id = "epa - ".concat(team.teamNumber.toString());
+    var teamOPR = teamRow.insertCell(); //TBA
+    teamOPR.id = "opr - ".concat(team.teamNumber.toString());
+    teamNum.textContent = team.teamNumber.toString();
+    teamName.textContent = team.teamName;
+    teamEPA.textContent = team.epa.toString();
+    teamOPR.textContent = team.opr.toString();
+  });
+}
+//update the table data using the team number
+var updateTable = function updateTable() {
+  teamsArr.forEach(function (team) {
+    var teamRow = document.getElementById("row - ".concat(team.teamNumber.toString()));
+    var teamNum = document.getElementById("num - ".concat(team.teamNumber.toString()));
+    var teamName = document.getElementById("name - ".concat(team.teamNumber.toString()));
+    var teamEPA = document.getElementById("epa - ".concat(team.teamNumber.toString()));
+    var teamOPR = document.getElementById("opr - ".concat(team.teamNumber.toString()));
+    teamNum.textContent = team.teamNumber.toString();
+    teamName.textContent = team.teamName;
+    teamEPA.textContent = team.epa.toString();
+    teamOPR.textContent = team.opr.toString();
   });
 };
 //DEBUGGING
+var logSomethingButton = document.getElementById("logSomethingButton");
 function logSomething() {
-  console.log("insights: ".concat((0, apiData_1.getEventInsightsTBA)().then(function (insights) {
-    console.log("TBA insights: ".concat(JSON.stringify(insights)));
-    console.log("something: ".concat(insights["Amplification Rate"]["frc2443"]));
-    for (var key in insights) {
-      console.log("key: ".concat(key));
-    }
-  })));
+  updateTable();
 }
+logSomethingButton.addEventListener("click", function () {
+  return logSomething();
+});
 //when the app starts call this function
 var initApp = function initApp() {
-  displayData();
+  getData();
 };
+var intervalId = setInterval(updateTable, 500);
 document.addEventListener("DOMContentLoaded", initApp);
-},{"./apiData":"src/apiData.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../constants":"constants.js","./apiData":"src/apiData.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

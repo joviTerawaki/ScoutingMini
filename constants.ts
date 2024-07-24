@@ -339,21 +339,54 @@ export interface EventInsightsTBA {
 }
 
 // Team obj that holds information gathered from the apis
-export class Team {
+export interface TeamBP {
     teamNumber: number;
     teamName: string;
     epa: number;
     opr: number;
-
+}
+export class Team implements TeamBP {
     constructor(
-        teamNumber: number,
-        teamName: string,
-        epa: number,
-        opr: number
+        private _teamNumber: number = 0,
+        private _teamName: string = "",
+        private _epa: number = 0,
+        private _opr: number = 0
     ) {
-        this.teamNumber = teamNumber;
-        this.teamName = teamName;
-        this.epa = epa;
-        this.opr = opr;
+        // this.teamNumber = _teamNumber;
+        // this.teamName = _teamName;
+        // this.epa = _epa;
+        // this.opr = _opr;
+    }
+
+    get teamNumber(): number {
+        return this._teamNumber;
+    }
+
+    set teamNumber(num: number) {
+        this._teamNumber = num;
+    }
+
+    get teamName(): string {
+        return this._teamName;
+    }
+
+    set teamName(name: string) {
+        this._teamName = name;
+    }
+
+    get epa(): number {
+        return this._epa;
+    }
+
+    set epa(epa: number) {
+        this._epa = epa;
+    }
+
+    get opr(): number {
+        return this._opr;
+    }
+
+    set opr(opr: number) {
+        this._opr = opr;
     }
 }
